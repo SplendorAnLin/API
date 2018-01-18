@@ -1,7 +1,7 @@
 package com.anlin.demo.utils;
 
-import com.lefu.commons.utils.lang.JsonUtils;
 import net.sf.json.JSONObject;
+import net.sf.json.util.JSONUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -100,7 +100,7 @@ public class AESUtils {
             params.put("orderId", orderId);
             params.put("partnerNo", partnerNo);
             params.put("action", action);
-            logger.info("加密后报文：{}", JsonUtils.toJsonString(params));
+            logger.info("加密后报文：{}", JSONUtils.valueToString(params));
         } catch (Exception e) {
             logger.error("加密处理异常！异常信息：{}", e);
         }
