@@ -55,8 +55,8 @@ public class Main {
             parmas.put("action", "recognition");
             parmas.put("orderId", getOrderIdByUUId());
             parmas.put("signData", sign);
-            parmas.put("encryptData", AESUtils.encode(AESUtils.encode(JSONUtils.valueToString(parmas), dataKey)));
-            System.out.println(sendReq("http://192.168.31.176:8080/tool/interface", parmas.toString(), "POST"));
+            parmas.put("encryptData", AESUtils.encode(AESUtils.encode(info.toString(), dataKey)));
+            System.out.println(sendReq("http://192.168.31.176:8080/tool/interface", JSONObject.fromObject(parmas).toString(), "POST"));
         } catch (Exception e) {
 
         }
