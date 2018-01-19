@@ -62,12 +62,12 @@ public class AESUtils {
      * @param isSynchronize 是否同步通知
      * @return
      */
-    public static JSONObject decode(Map<String, String> map, String key, boolean isSynchronize){
+    public static JSONObject decode(JSONObject map, String key, boolean isSynchronize){
         String signKey = key.substring(16);
         String dataKey = key.substring(0, 16);
-        String result = decode(decode(map.get("encryptData")), dataKey);
+        String result = decode(decode(map.getString("encryptData")), dataKey);
         logger.info("返回报文明文:{}", result);
-        String signature = map.get("signature");
+        String signature = map.getString("signature");
         String reSign = "";
         if (isSynchronize){
             reSign = DigestUtils.shaHex(result + signKey);
