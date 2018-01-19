@@ -1,12 +1,8 @@
 package com.anlin.demo.main;
 
 import com.anlin.demo.utils.AESUtils;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
-import net.sf.json.JSONString;
-import net.sf.json.util.JSONUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,6 +25,8 @@ public class Main {
 
     public static void main(String[] args) {
         getRecognition();
+//        String s = "{\"signature\": \"cf9f24422c981dc7ff60496e36124492f6b19826\",\"encryptData\": \"nFukkTC8IYc4pxlHg1YGnOIdMfWOrEqlo1Bunp229XXRzPgwcWGveSJyYQcpMcQ6UX9eJx2g+mM2ZK0rwU+L3oMLZKLQpDVBwEp7wuBaJ1iMprKjxx6/iIWzeiytMQZayxTMQGs3pVqR/hVJGZe6oG3rk9dLaThELLowHzR6ULY8GfsVhYzdebOna7MIl8SklAPksD9uuTPqbl5k98Ii0Uyw7pw1sgC0d9vVA88Ker4XiAOuHrmlsHZ8W28DPooNuFpHRZZc000kAQsk7x786VxDlwtoJGL6rpIf2VsobgygAe+rkQ5mOfR37GUHW49EDG5XL9jseJrHVdQR8KTFb/wkf0oi9hgXbVe9ldcYStf/1wsBnlix1/QMZQOqMh+e1G69S5iOIYlYtqmohNyJ8kqe9QWy6gqu9HBQbzH2iNXVtzwbSiIpGQEMZItf6Y9jtAgb10hn4oFveV5s+w27SlBocDwoIJWyGuApToR24=\"}";
+//        System.out.println(JSONObject.fromObject(s).toString());
     }
 
     /**
@@ -41,10 +39,10 @@ public class Main {
             Map<String, Object> parmas = new HashMap<>();
             String signKey = key.substring(16);
             String dataKey = key.substring(0, 16);
-            info.put("cardNo", "6215583202002031321");
+            info.put("cardNo", "6212262201023557228");
             info.put("code", "Y");
             info.put("length", "Y");
-            info.put("penLength", "Y");
+            info.put("panLength", "Y");
             info.put("providerCode", "Y");
             info.put("cardType", "Y");
             info.put("cardName", "Y");
@@ -56,7 +54,8 @@ public class Main {
             parmas.put("orderId", getOrderIdByUUId());
             parmas.put("signData", sign);
             parmas.put("encryptData", AESUtils.encode(AESUtils.encode(info.toString(), dataKey)));
-            System.out.println(sendReq("http://192.168.31.176:8080/tool/interface", JSONObject.fromObject(parmas).toString(), "POST"));
+            JSONObject res = sendReq("http://192.168.0.59:8080/tool/interface", JSONObject.fromObject(parmas).toString(), "POST");
+            System.out.println(AESUtils.decode(res, key, true));
         } catch (Exception e) {
 
         }
@@ -78,7 +77,7 @@ public class Main {
      * @param menthod
      * @return
      */
-    public static String sendReq(String url, String data, String menthod) {
+    public static JSONObject sendReq(String url, String data, String menthod) {
         java.net.HttpURLConnection urlConnection = null;
         BufferedOutputStream out;
         StringBuffer respContent = new StringBuffer();
@@ -113,6 +112,6 @@ public class Main {
             e.printStackTrace();
         }
         urlConnection.disconnect();
-        return respContent.toString();
+        return JSONObject.fromObject(respContent.toString());
     }
 }
