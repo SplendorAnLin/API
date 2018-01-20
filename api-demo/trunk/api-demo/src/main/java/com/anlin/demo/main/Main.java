@@ -24,7 +24,57 @@ public class Main {
     private static final String key = "8EFF9AB5485F41259FD2287B581B3E9F";
 
     public static void main(String[] args) {
-        getRecognition();
+//        getRecognition();
+//        luhn();
+        idCard();
+    }
+
+    /**
+     * 身份证算法
+     */
+    public static void idCard(){
+        try {
+            // 请求参数组装
+            JSONObject info = new JSONObject();
+            Map<String, Object> parmas = new HashMap<>();
+            String signKey = key.substring(16);
+            String dataKey = key.substring(0, 16);
+            info.put("idCard", "511701199101317047");
+            String sign = DigestUtils.shaHex(info.toString() + signKey);
+            parmas.put("partnerNo", partnerNo);
+            parmas.put("action", "idCardCheck");
+            parmas.put("orderId", getOrderIdByUUId());
+            parmas.put("signData", sign);
+            parmas.put("encryptData", AESUtils.encode(AESUtils.encode(info.toString(), dataKey)));
+            JSONObject res = sendReq("http://open.alblog.cn/tool/interface", JSONObject.fromObject(parmas).toString(), "POST");
+            System.out.println(AESUtils.decode(res, key, true));
+        } catch (Exception e) {
+
+        }
+    }
+
+    /**
+     * Luhn 算法
+     */
+    public static void luhn(){
+        try {
+            // 请求参数组装
+            JSONObject info = new JSONObject();
+            Map<String, Object> parmas = new HashMap<>();
+            String signKey = key.substring(16);
+            String dataKey = key.substring(0, 16);
+            info.put("cardNo", "6212262201023557228");
+            String sign = DigestUtils.shaHex(info.toString() + signKey);
+            parmas.put("partnerNo", partnerNo);
+            parmas.put("action", "checkCard");
+            parmas.put("orderId", getOrderIdByUUId());
+            parmas.put("signData", sign);
+            parmas.put("encryptData", AESUtils.encode(AESUtils.encode(info.toString(), dataKey)));
+            JSONObject res = sendReq("http://open.alblog.cn/tool/interface", JSONObject.fromObject(parmas).toString(), "POST");
+            System.out.println(AESUtils.decode(res, key, true));
+        } catch (Exception e) {
+
+        }
     }
 
     /**
